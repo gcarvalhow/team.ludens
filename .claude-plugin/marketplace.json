@@ -1,0 +1,55 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "team-ludens",
+  "description": "Marketplace do time Ludens — papéis (Product Thinking / Senior Dev / QA), pipeline de spec e fluxo TBD compartilhados entre os repositórios do Ludens",
+  "owner": {
+    "name": "Gabriel Carvalho",
+    "email": "pedroolivo.dev@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "core",
+      "source": "./",
+      "description": "Pipeline de produto→engenharia→specs (feature-design/logic-design/feature-implementation-spec) + fluxo TBD (tbd-start/commit/pr/scope) + setup + agents product-thinking/senior-dev/qa-engineer — universal, todo repo Ludens habilita",
+      "skills": [
+        "./skills/tbd-start",
+        "./skills/tbd-commit",
+        "./skills/tbd-pr",
+        "./skills/tbd-scope",
+        "./skills/setup",
+        "./skills/feature-design",
+        "./skills/logic-design",
+        "./skills/feature-implementation-spec"
+      ],
+      "agents": [
+        "./agents/product-thinking.md",
+        "./agents/senior-dev.md",
+        "./agents/qa-engineer.md"
+      ],
+      "hooks": {
+        "SessionStart": [
+          {
+            "matcher": "startup",
+            "hooks": [
+              { "type": "command", "command": "python \"${CLAUDE_PLUGIN_ROOT}/scripts/setup_reminder.py\"" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "backend",
+      "source": "./",
+      "description": "Skill backend-architecture (FastAPI · DDD · monólito modular · Outbox in-process) — só api.ludens",
+      "skills": ["./skills/backend-architecture"],
+      "agents": []
+    },
+    {
+      "name": "frontend",
+      "source": "./",
+      "description": "Skill frontend-architecture (React · Vite · JS/JSX · TanStack Query) — só web.ludens",
+      "skills": ["./skills/frontend-architecture"],
+      "agents": []
+    }
+  ]
+}

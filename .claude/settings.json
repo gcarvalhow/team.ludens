@@ -1,0 +1,13 @@
+{
+  "enabledPlugins": {
+    "core@team-ludens": true
+  },
+  "extraKnownMarketplaces": {
+    "team-ludens": {
+      "source": {
+        "source": "github",
+        "repo": "gcarvalhow/team.ludens"
+      }
+    }
+  }
+}
