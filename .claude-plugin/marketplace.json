@@ -47,7 +47,7 @@
     {
       "name": "frontend",
       "source": "./",
-      "description": "Skill frontend-architecture (React · Vite · JS/JSX · TanStack Query) — só web.ludens",
+      "description": "Skill frontend-architecture (Next.js · App Router · TypeScript · TanStack Query) — só web.ludens",
       "skills": ["./skills/frontend-architecture"],
       "agents": []
     }

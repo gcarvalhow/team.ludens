@@ -96,30 +96,34 @@ Depois: `/team-ludens:tbd-pr` → recomenda `senior-dev` (Modo 2) + `/code-revie
 
 ## B. Frontend — responsável: **Diego (Frontend)**
 
-> Ordem de dependência: `routes/endpoints.js` → `schemas/` → `services/` →
-> `hooks/queries/query-options.js` + `hooks/queries/` → `hooks/mutations/` →
-> `hooks/forms/` → `components/` → `components/ui/` → barrels.
+> Ordem de dependência: `routes/endpoints.ts` → `schemas/` → `server/types/` →
+> `server/services/` → `hooks/queries/query-options.ts` + `hooks/queries/` →
+> `hooks/mutations/` → `hooks/forms/` → `components/` → `components/ui/` → rota
+> em `src/app/` → barrels.
 
 ### B.1 Arquivos a criar / alterar
 
 | # | Camada | Caminho real | O que fazer |
 |---|---|---|---|
-| 1 | endpoints | `src/routes/endpoints.js` | adicionar o grupo da feature; rotas parametrizadas são funções |
-| 2 | schemas | `src/features/<feat>/schemas/<x>.schema.js` | Zod — response schema + DTO de request |
-| 3 | services | `src/features/<feat>/services/<x>.service.js` | `fetcher` + `endpoints` + `.parse()`; transform de shape aqui, não no componente |
-| 4 | queries | `src/features/<feat>/hooks/queries/query-options.js` | query keys + query options centralizados |
-| 5 | queries | `src/features/<feat>/hooks/queries/use<X>Queries.js` | `useQuery` sobre as options |
-| 6 | mutations | `src/features/<feat>/hooks/mutations/use<X>Mutations.js` | `useMutation` → invalida queries + toast sucesso + toast erro |
-| 7 | forms | `src/features/<feat>/hooks/forms/use<X>Form.js` | `react-hook-form` + resolver Zod (schema de request) — só se houver form |
-| 8 | components | `src/features/<feat>/components/<X>.jsx` | conecta hooks e UI; trata loading/error/empty |
-| 9 | components/ui | `src/features/<feat>/components/ui/<X>.jsx` | apresentacional puro — sem `useQuery`/`useMutation`/service |
-| 10 | barrels | `index.js` em toda subpasta criada + na raiz da feature | obrigatório, não é dívida |
+| 1 | endpoints | `src/routes/endpoints.ts` | adicionar o grupo da feature; rotas parametrizadas são funções |
+| 2 | schemas | `src/features/<feat>/schemas/<x>.schema.ts` | Zod — response schema + DTO de request |
+| 3 | types | `src/features/<feat>/server/types/<x>.types.ts` | `z.infer` dos schemas (API pública de tipos) |
+| 4 | services | `src/features/<feat>/server/services/<x>.service.ts` | `fetcher` + `endpoints` + `.parse()`; transform de shape aqui, não no componente |
+| 5 | queries | `src/features/<feat>/hooks/queries/query-options.ts` | query keys + query options centralizados |
+| 6 | queries | `src/features/<feat>/hooks/queries/use<X>Queries.ts` | `useQuery` sobre as options |
+| 7 | mutations | `src/features/<feat>/hooks/mutations/use<X>Mutations.ts` | `useMutation` → invalida queries + toast sucesso + toast erro |
+| 8 | forms | `src/features/<feat>/hooks/forms/use<X>Form.ts` | `react-hook-form` + resolver Zod (schema de request) — só se houver form |
+| 9 | components | `src/features/<feat>/components/<X>.tsx` | `'use client'`; conecta hooks e UI; trata loading/error/empty |
+| 10 | components/ui | `src/features/<feat>/components/ui/<X>.tsx` | apresentacional puro — sem `useQuery`/`useMutation`/service |
+| 11 | rota | `src/app/<caminho>/page.tsx` | Server Component; `await params`; prefetch + `HydrationBoundary` quando fizer sentido |
+| 12 | barrels | `index.ts` em toda subpasta criada + na raiz da feature | obrigatório, não é dívida |
 
 ### B.2 Código a colar (esqueleto por arquivo)
 
-Blocos prontos seguindo `frontend-architecture` (fonte de tipo = schema Zod;
-`query-options.js` obrigatório; toda mutation invalida + toast; `components/ui`
-nunca fala com service).
+Blocos prontos seguindo `frontend-architecture` (TypeScript estrito; fonte de
+tipo = `z.infer` do schema Zod; `query-options.ts` obrigatório; toda mutation
+invalida + toast; `components/ui` nunca fala com service; `'use client'` só onde
+há hook/estado/handler).
 
 ### B.3 Contrato consumido
 
@@ -133,13 +137,13 @@ service layer + registro da divergência — nunca editar o repo de backend.
 ```
 git checkout master && git pull && git checkout -b feat/<NN>-<slug>
 # commit 1 — contrato
-git add src/routes/endpoints.js src/features/<feat>/schemas src/features/<feat>/services && git commit -m "feat(<feat>): endpoints, schemas e services de <x>"
+git add src/routes/endpoints.ts src/features/<feat>/schemas src/features/<feat>/server && git commit -m "feat(<feat>): endpoints, schemas, tipos e services de <x>"
 # commit 2 — hooks
 git add src/features/<feat>/hooks && git commit -m "feat(<feat>): queries e mutations de <x>"
-# commit 3 — UI
-git add src/features/<feat>/components && git commit -m "feat(<feat>): telas e componentes de <x>"
+# commit 3 — UI + rota
+git add src/features/<feat>/components src/app && git commit -m "feat(<feat>): telas, componentes e rota de <x>"
 # commit 4 — barrels
-git add src/features/<feat> && git commit -m "chore(<feat>): barrels index.js da feature <x>"
+git add src/features/<feat> && git commit -m "chore(<feat>): barrels index.ts da feature <x>"
 ```
 Depois: `npm run lint && npm run build` verdes → `/team-ludens:tbd-pr`.
 

@@ -1,39 +1,94 @@
-# Formulários (react-hook-form + Zod)
+# Formulários — react-hook-form + Zod
 
-## O schema de request guia o form — nunca o de response
+Formulário no `web.ludens` é a composição de: schema de **request**,
+`react-hook-form`, design system (shadcn/ui), mutation de submit, e sincronização
+de defaults/edição/reset.
 
-```js
-// account/hooks/forms/useRegisterForm.js
+Separar: contrato do dado · lógica de formulário · UI visual do formulário ·
+orchestration da tela/dialog/sheet que usa o formulário.
+
+## Stack padrão
+
+`react-hook-form` · `@hookform/resolvers/zod` · schema Zod de **request** ·
+componentes de formulário do shadcn/ui.
+
+**O schema do form é o de request, nunca o de response.**
+
+## Estrutura
+
+```
+schemas/register.schema.ts          ← payload
+server/types/auth.types.ts          ← RegisterDTO = z.infer<...>
+hooks/forms/useRegisterForm.ts      ← useForm, defaults, submit, edição
+components/forms/RegisterForm.tsx    ← campos, ligação form.control, erros, estado de submit
+components/RegisterDialog.tsx        ← abertura/fechamento, contexto da tela
+```
+
+## `hooks/forms/`
+
+Quando o formulário passa do trivial, a lógica sobe:
+
+```ts
+'use client';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { registerSchema } from '@account/schemas';
-import { useAccountMutations } from '@account/hooks/mutations';
+import { registerSchemaDTO } from '@account/schemas';
+import { useAuthMutations } from '@account/hooks/mutations';
+import type { RegisterDTO } from '@account/server/types';
 
-export function useRegisterForm() {
-  const { register: registerMutation } = useAccountMutations();
+export function useRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
+  const { register: registerMutation } = useAuthMutations();
 
-  const form = useForm({
-    resolver: zodResolver(registerSchema),   // schema de REQUEST
-    defaultValues: { cpf: '', email: '', password: '' },
+  const form = useForm<RegisterDTO>({
+    resolver: zodResolver(registerSchemaDTO),
+    mode: 'onSubmit',
+    defaultValues: { name: '', cpf: '', email: '', password: '' },
   });
 
-  const onSubmit = form.handleSubmit((values) => registerMutation.mutate(values));
+  const handleSubmit = form.handleSubmit(async (data) => {
+    await registerMutation.mutateAsync(data);
+    onSuccess?.();
+  });
 
-  return { form, onSubmit, isPending: registerMutation.isPending };
+  return { form, handleSubmit, isPending: registerMutation.isPending };
 }
 ```
 
-## Regras
+Se o form cresce, reaparece em mais de um componente, tem lógica de edição, faz
+transformação relevante ou depende de mutation → sai do componente e vai para
+`hooks/forms/`.
 
-- `hooks/forms/` **pode**: `useForm`, resolver Zod, integrar com mutations,
-  preparar `defaultValues`, sincronizar edição via `reset`.
-- **Não pode**: renderizar JSX, fazer fetch direto, acumular lógica que é
-  orchestration de tela inteira (isso vai para `components/`).
-- Validação de forma no schema: formato de CPF (RF09), quantidade entre 1 e 6
-  (RN01 como limite de forma; o teto real é validado no backend), e-mail. Regra
-  de servidor ("CPF já cadastrado", "sessão esgotada") **não** entra no resolver
-  — vem como erro da mutation e é exibida no campo/toast.
-- Máscaras (CPF, telefone) são de exibição — o valor enviado é limpo; o transform
-  fica no `onSubmit` ou na service, não espalhado pelos componentes.
-- Todo form tem estado de `isPending` desabilitando o submit, e mensagens de erro
-  por campo específicas e acionáveis (RNF04).
+## Formulário visual (`components/forms/`)
+
+`'use client'`. Foca em layout dos campos, ligação `form.control` ↔ shadcn/ui,
+exibição de erros (`<FormMessage />`), estado visual de submit. Recebe `form`,
+`onSubmit`, `isPending`. **Não** é dono de mutation, fetch, regra de submit maior
+que montar o HTML, nem decisão de fechar dialog.
+
+## `defaultValues`
+
+Sempre explícitos (string → `''`; array → `[]`). Em edição assíncrona, usar
+`form.reset({...})` no `useEffect` quando os dados chegam — sincroniza o estado
+inteiro e limpa dirty state coerentemente. Não fazer `setValue` campo por campo
+sem necessidade.
+
+## Máscaras
+
+CPF/telefone são de exibição. O valor enviado é limpo (só dígitos) — o transform
+fica no `onSubmit` ou na service, não espalhado pelos componentes.
+
+## Validação de forma vs. de servidor
+
+- **Forma** (no schema/resolver): formato de CPF (RF09), quantidade 1–6 (RN01
+  como limite de forma; o teto real é do backend), e-mail.
+- **Servidor** ("CPF já cadastrado", "sessão esgotada"): não entra no resolver —
+  vem como erro da mutation e é exibido no campo/toast.
+
+## Anti-padrões
+
+- `useForm()` dentro de `components/ui/`;
+- chamar mutation no form visual;
+- schema de response validando submit;
+- form sem `defaultValues`;
+- dialog + mutation + lógica de sucesso + UI do form no mesmo arquivo.

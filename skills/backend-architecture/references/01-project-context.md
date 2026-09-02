@@ -16,7 +16,7 @@ exceder a capacidade da sessão** (RN05), mesmo sob acesso simultâneo.
 ## Split de repositórios
 
 - **`api.ludens`** (este) — API FastAPI, monólito modular + DDD.
-- **`web.ludens`** — frontend React + Vite. Nunca é tocado a partir deste repo.
+- **`web.ludens`** — frontend Next.js (App Router, TypeScript). Nunca é tocado a partir deste repo.
 - **`docs.ludens`** — produto, requisitos, arquitetura, specs. Fonte de entrada.
 
 Não há repositório de worker — o Ludens não executa automações. Os efeitos

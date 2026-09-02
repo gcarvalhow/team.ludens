@@ -1,6 +1,6 @@
 ---
 name: frontend-architecture
-description: Regras canônicas de arquitetura e código para o frontend (web.ludens) do Ludens — React + Vite + JS/JSX, feature-based, TanStack Query + Zod + react-hook-form. Carregar antes de qualquer implementação em web.ludens. Contém 13 arquivos de referência. Escopo é web.ludens — para o backend use backend-architecture.
+description: Regras canônicas de arquitetura e código para o frontend (web.ludens) do Ludens — Next.js (App Router) + React + TypeScript estrito, feature-based, TanStack Query + Zod + react-hook-form + shadcn/ui + Tailwind. Carregar antes de qualquer implementação em web.ludens. Contém 14 arquivos de referência. Escopo é web.ludens — para o backend use backend-architecture.
 ---
 
 # Frontend Architecture — Regras Canônicas de Código
@@ -19,17 +19,21 @@ em ordem numérica. Não pular nenhum. Não resumir. Ler na íntegra.
 
 ## Stack
 
-- **React 19 + Vite** — SPA, JavaScript/JSX (não TypeScript, não Next.js).
-- **React Router** — roteamento client-side.
+- **Next.js (App Router) + React** — SPA/SSR híbrido; rotas em `src/app/`.
+- **TypeScript em modo estrito** (`strict`, `noImplicitAny`, `noUnusedLocals`,
+  `exactOptionalPropertyTypes`, `moduleResolution: "bundler"`).
 - **TanStack Query v5** — cache de servidor (queries + mutations).
-- **Zod** — validação de contrato em runtime (funciona em JS; usada para
-  `parse()` de response e resolver de formulário).
-- **react-hook-form** — formulários.
-- **ESLint + Prettier** — lint e formatação (obrigatório no pipeline:
-  `npm run lint`).
-- Toasts: uma lib de toast (`sonner` ou equivalente) padronizada no projeto.
+- **Zod** — fonte de verdade do contrato de dados (parse de response, resolver de
+  formulário). O tipo nasce do schema (`z.infer`), nunca uma `interface` manual.
+- **react-hook-form** + `@hookform/resolvers/zod` — formulários.
+- **shadcn/ui + Tailwind CSS** — design system.
+- **Sonner** — toasts (sempre; nunca outra lib).
+- **ESLint (config Next) + Prettier** — lint e formatação (portão de pipeline).
 - UI em **pt-BR**, responsiva (mobile é pré-requisito do N2), **WCAG 2.1 AA** como
   referência.
+
+> Mesma stack e mesmas regras do `web.hub.dommed` (DOM Med), adaptadas ao domínio
+> do Ludens.
 
 ---
 
@@ -55,7 +59,7 @@ pare e sinalize.
 00-project-context.md
 01-architecture.md
 02-creating-a-feature.md
-03-schemas-and-validation.md
+03-typescript-and-schemas.md
 04-queries.md
 05-mutations.md
 06-forms.md
@@ -65,6 +69,7 @@ pare e sinalize.
 10-build-and-quality.md
 11-ux-principles.md
 12-backend-boundary.md
+13-testing.md
 ```
 
 ---
@@ -78,11 +83,12 @@ Não são sugestões, não são guidelines opcionais. São regras. Obrigatórias
 ### Em caso de conflito entre abordagens
 
 Escolher a **mais restritiva**:
-- Colocar lógica no componente ou no hook → no hook.
+- `unknown` + narrowing com Zod ou um tipo genérico → `unknown` + Zod.
+- Lógica no componente ou no hook → no hook.
 - Barrel ou deep import → barrel.
-- Recriar a query key inline ou usar `query-options.js` → `query-options.js`.
-- Ajustar o componente pro shape errado da API ou fazer transform na service →
-  transform na service.
+- Recriar a query key inline ou usar `query-options.ts` → `query-options.ts`.
+- Ajustar o componente pro shape errado da API ou transform na service → transform na service.
+- `any` ou modelagem correta → modelagem correta.
 
 ### Violação detectada → parar e corrigir
 
@@ -95,13 +101,14 @@ Escolher a **mais restritiva**:
 
 | Área | Regra mais crítica |
 |------|--------------------|
-| Contrato | `schemas/` (Zod) é a fonte do formato — nenhum shape duplicado à mão em outro lugar |
-| Queries | `query-options.js` é obrigatório — nunca recriar key ou fn fora dele |
+| Tipos | `z.infer<typeof schema>` é a única fonte — nunca `interface` manual duplicando schema |
+| Queries | `query-options.ts` é obrigatório — nunca recriar key ou fn fora dele |
 | Mutations | Toda mutation invalida queries + toast de sucesso + toast de erro |
-| Componentes | `components/ui/` nunca usa `useQuery`, `useMutation` ou service |
-| Imports | Barrel é entrega, não dívida — toda subpasta sai com `index.js` |
-| Build | `npm run lint` e `npm run build` verdes antes de qualquer commit |
+| Componentes | `components/ui/` nunca usa `useQuery`, `useMutation`, service, nem busca dado por id |
+| Server/Client | Componente com hook/estado/handler leva `'use client'`; página/layout são Server Components por padrão |
+| Imports | Barrel é entrega, não dívida — toda subpasta sai com `index.ts` |
+| Build | `npm run build` (type check do Next) + `npm run lint` verdes antes de qualquer commit |
 | Backend | Frontend nunca toca no repositório de backend — nunca |
 | UX | Todo estado assíncrono trata loading + error + empty; contagem regressiva da reserva sempre visível (RN03) |
-| Forms | O schema de request guia o form, nunca o schema de response |
+| Forms | O schema de **request** guia o form, nunca o de response |
 | Git | Fluxo gerenciado por `/team-ludens:tbd-start`, `/team-ludens:tbd-commit`, `/team-ludens:tbd-pr` |
