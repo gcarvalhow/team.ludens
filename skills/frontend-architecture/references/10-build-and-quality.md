@@ -1,45 +1,59 @@
-# Build e Qualidade
+# Build e Qualidade de Código
 
-## Gates de merge (`docs.ludens/backend/testing.md`, seção frontend)
+Qualidade no `web.ludens` significa código que compila, respeita o lint, está
+formatado, passa nos testes cabíveis e não esconde inconsistência estrutural.
+Build limpo é parte da definição de pronto.
 
-- **`npm run lint`** verde (ESLint + Prettier, obrigatório no pipeline).
-- **`npm run build`** verde (Vite build).
-- **≥ 1 aprovação** de outro desenvolvedor no PR.
-- Integra em `master` sem quebrar o build.
+## Comandos do projeto
 
-`npm run lint` e `npm run build` **passam antes de qualquer commit** — não deixe
-para o CI descobrir.
-
-## Testes
-
-O `web.ludens` hoje não tem testes de componente definidos como gate — o único
-gate automatizado é o lint. Testes de componente são **TBD** (documentados como
-lacuna em `docs.ludens/backend/testing.md`). Não invente uma suíte que não existe
-nem sugira uma stack de teste como se fosse a convenção adotada — se testes de
-frontend forem introduzidos, isso é decisão de arquitetura a documentar em
-`docs.ludens` antes de virar convenção.
-
-Enquanto isso, a rede de segurança do frontend é: lint verde + build verde + o
-roteiro de teste manual pré-entrega do QA (`agents/qa-engineer.md`) + a revisão
-do PR.
-
-## Convenções que o lint não pega sozinho
-
-- Nenhum `console.log` deixado no código de produção (só em `onError` de mutation,
-  se ajudar debug — e mesmo aí, preferir não).
-- Nenhum segredo no código nem no bundle — só `VITE_*` de `.env`, e `.env` fora
-  do VCS (só `.env.example`).
-- Nenhum dado pessoal (CPF, e-mail, histórico) em `localStorage` direto — usar o
-  padrão de auth da feature `account` (RNF01). `localStorage` só para preferência
-  de UI não sensível, documentada no código.
-- Todo estado assíncrono com loading/error/empty tratados (é regra de UX e de
-  arquitetura — `references/07` e `references/11`).
-
-## Passo a passo TBD
-
+```bash
+npm run build     # next build — inclui type check do TypeScript
+npm run lint      # eslint (config next)
+npm run format    # prettier
+npm run test      # testes (ver references/13)
+npx playwright test
 ```
-git checkout master && git pull && git checkout -b feat/<NN>-<slug>
-# commits por camada (ver implementation-spec.md da feature)
-npm run lint && npm run build      # antes de cada push
-/team-ludens:tbd-pr
-```
+
+## Ordem de validação
+
+1. `npm run build`
+2. `npm run lint`
+3. `npm run test`
+4. `npx playwright test` quando a mudança afeta UI ou fluxo
+5. `npm run format` antes do fechamento, se necessário
+
+## O que `npm run build` valida
+
+Build do Next + type checking do TypeScript + imports inexistentes + erros de App
+Router + uso incorreto de Server/Client Components + inconsistências que só
+aparecem em produção.
+
+Implicações: `noUnusedLocals` quebra; alias errado quebra; componente com hook
+sem `'use client'` quebra; assinatura errada de rota App Router quebra.
+
+## O que `npm run lint` valida
+
+ESLint com regras base de JS, `typescript-eslint`, `eslint-plugin-react`, regras
+do Next, `react-hooks/recommended`. Warning tolerado pelo tooling não é convite
+para degradar o código.
+
+## Portões de merge
+
+CI em `push`/PR para `master`: `npm run build` verde · `npm run lint` verde ·
+**1 aprovação** de outro desenvolvedor · integra em `master` sem quebrar o build.
+
+## O que não pode entrar no código final
+
+- `console.log` de debug esquecido;
+- import não usado;
+- arquivo morto desconectado da feature;
+- contrato quebrado escondido por `as`/cast desnecessário;
+- código novo copiando padrão ruim do legado sem justificativa;
+- componente visual com orchestration indevida;
+- subpasta sem barrel.
+
+## Como reportar
+
+Dizer quais comandos foram rodados, o que passou, o que falhou, se a falha é
+pré-existente ou introduzida, e se algum passo não se aplicava ao escopo. Nunca
+"não testei" sem explicação.

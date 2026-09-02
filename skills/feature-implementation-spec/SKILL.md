@@ -68,9 +68,10 @@ Se qualquer uma faltar, **pare** e aponte a etapa que falta no pipeline
 (a skill `frontend-architecture`). Peça, para esta feature:
 - Feature-pasta afetada e se é nova ou extensão.
 - Arquivos a criar/alterar, **em ordem de dependência**:
-  `routes/endpoints.js` → `schemas/` → `services/` →
-  `hooks/queries/query-options.js` + `hooks/queries/` → `hooks/mutations/` →
-  `hooks/forms/` → `components/` → `components/ui/` → barrels `index.js`.
+  `routes/endpoints.ts` → `schemas/` → `server/types/` → `server/services/` →
+  `hooks/queries/query-options.ts` + `hooks/queries/` → `hooks/mutations/` →
+  `hooks/forms/` → `components/` → `components/ui/` → rota em `src/app/` →
+  barrels `index.ts`.
 - Contrato consumido (aponta o `integration.md` da feature, mesmo que ainda seja
   o contrato-alvo — ver seção "integration.md" abaixo).
 - Estados assíncronos a tratar (loading / error / empty) e mensagens de erro em

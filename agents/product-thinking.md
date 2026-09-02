@@ -114,7 +114,7 @@ salva specs em `docs.ludens/specs/[domínio]-[conceito]/spec.md`. Conceito: máx
 
 ## O que você NÃO faz
 
-- Escrever código de aplicação (`.py`, `.jsx`, `pyproject.toml`, `package.json`)
+- Escrever código de aplicação (`.py`, `.tsx`, `pyproject.toml`, `package.json`)
 - Tomar decisões de arquitetura ou tecnologia
 - Atribuir trabalho aos membros do time (o PO/Tech Lead atribui via `tbd-start`)
 - Aprovar suas próprias specs — sempre gate na aprovação humana do PO
@@ -144,7 +144,7 @@ Você opera a partir de `docs.ludens`. Você produz artefatos que dois repos de
 execução consomem:
 
 - **api.ludens** — backend FastAPI (DDD, monólito modular, Outbox in-process)
-- **web.ludens** — frontend React + Vite
+- **web.ludens** — frontend Next.js (App Router, TypeScript)
 
 Suas specs são a interface entre decisão de produto e execução de engenharia.
 Você referencia esses repos pelo nome mas não opera dentro deles.

@@ -16,7 +16,7 @@ Não ajustar componente/hook/schema para "encaixar" o dado incorreto. **Fazer:**
 um transform na **service layer** que converte o shape atual para o esperado, e
 registrar a divergência.
 
-```js
+```ts
 // converte snake_case da API para camelCase que o frontend usa
 export async function fetchOrders() {
   const { data } = await fetcher.get(API_ENDPOINTS.account.orders.list);
@@ -30,10 +30,11 @@ O transform fica **na service**, nunca no componente, hook ou schema.
 ### Endpoint ainda não existe
 
 Não codificar a regra de negócio no frontend para compensar. **Fazer:** trabalhar
-contra o **contrato-alvo** do `docs.ludens/specs/[domínio]-[conceito]/integration.md`
-(gerado pela skill `feature-implementation-spec`), com um mock local claramente
-marcado `// TODO: remover quando <rota> existir`. Quando o backend entregar,
-remover o mock **sem alterar nenhum outro arquivo** — se precisar mexer em
+contra o **contrato-alvo** do
+`docs.ludens/specs/[domínio]-[conceito]/integration.md` (gerado pela skill
+`feature-implementation-spec`), com um mock local claramente marcado
+`// TODO: remover quando <rota> existir`. Quando o backend entregar, remover o
+mock **sem alterar nenhum outro arquivo** — se precisar mexer em
 schema/service/hook, o contrato não foi acordado antes.
 
 ### Contrato ambíguo
@@ -47,13 +48,12 @@ quando não há reembolso? — afeta `.nullable()` vs `.optional()` no schema".
 
 **Backend:** consistência de disponibilidade (RN05), limite por CPF (RN01),
 política de reembolso (RN02), expiração de reserva (RN03), transições de estado de
-ordem, autorização (o que cada perfil pode fazer). O frontend **consome o
-resultado da API** — não duplica a regra. Se a API não devolve o que a UI precisa
-para decidir, isso é uma lacuna de contrato a registrar, não uma regra a
-reimplementar.
+pedido, autorização. O frontend **consome o resultado da API** — não duplica a
+regra. Se a API não devolve o que a UI precisa para decidir, isso é uma lacuna de
+contrato a registrar, não uma regra a reimplementar.
 
 **Frontend:** validação de forma no formulário (formato, presença, faixa),
-ordenação visual de listas, estado de UI local (drawer, aba, filtro temporário),
+ordenação visual de listas, estado de UI local (dialog, aba, filtro temporário),
 formatação para exibição (datas, rótulos de status, máscara de CPF), loading /
 error / empty.
 

@@ -7,7 +7,7 @@ feature-based, docs) — nunca hardcode uma lista fixa de escopos.
   `src/app/modules/` (`identity`, `catalog`, `booking`, `payment`,
   `notification`) ou `core` / `outbox` se a mudança é na base.
 - **Frontend (`web.ludens`):** feature de domínio tocada (`catalog`, `booking`,
-  `checkout`, `account`, `admin`) ou área transversal (`components`, `lib`,
+  `checkout`, `account`, `admin`) ou área transversal (`app`, `components`, `lib`,
   `routes`).
 - **Infra/config em qualquer repo** (`docker/`, `Dockerfile`, `pyproject.toml`,
   `package.json`, `.github/`, `migrations/`): usa esse nome (`docker`, `deps`,
