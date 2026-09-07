@@ -32,8 +32,8 @@ em ordem numérica. Não pular nenhum. Não resumir. Ler na íntegra.
 - UI em **pt-BR**, responsiva (mobile é pré-requisito do N2), **WCAG 2.1 AA** como
   referência.
 
-> Mesma stack e mesmas regras do `web.hub.dommed` (DOM Med), adaptadas ao domínio
-> do Ludens.
+> Mesma stack e mesmas regras de um frontend privado anterior do mesmo autor,
+> adaptadas ao domínio do Ludens.
 
 ---
 

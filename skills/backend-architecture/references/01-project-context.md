@@ -33,7 +33,8 @@ colaterais (e-mail, estorno) rodam como handlers Python no mesmo processo da API
 - **`pydantic-settings`** — toda config lida de `.env.local` (dev) ou
   `.env.production` (prod), via `src/app/config.py`. A aplicação **falha na
   inicialização** se faltar uma variável obrigatória.
-- **Ruff** — lint, obrigatório no pipeline (`ruff check .`).
+- **Sem formatador/linter automatizado na pipeline** — estilo existente do
+  código é respeitado manualmente, nunca reformatado por ferramenta.
 - **Pytest** — testes (`pytest -q`), obrigatório no pipeline.
 - **Docker / Docker Compose** — runtime padrão local e de pipeline. A API sobe
   via container, não `uvicorn` no host.
