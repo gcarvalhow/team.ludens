@@ -1,12 +1,11 @@
 # Testes e Qualidade
 
-Diferente do backend da Dom Med que inspirou este, o Ludens **tem lint e testes
+Diferente do backend privado anterior que inspirou este, o Ludens **tem testes
 obrigatórios no pipeline desde o início**. Fonte: `docs.ludens/backend/testing.md`
 e `docs.ludens/team/maintainability.md`.
 
 ## Gates de merge (não negociáveis)
 
-- **`ruff check .`** verde (lint, obrigatório no pipeline).
 - **`pytest -q`** verde.
 - **`docker build`** limpo.
 - **≥ 1 aprovação** de outro desenvolvedor no PR.
@@ -55,8 +54,11 @@ ar, reserva liberada — RNF03) e um **teste de restart** com reservas abertas.
 
 - PEP 8; `snake_case` para variáveis/funções, `PascalCase` para classes,
   `snake_case` para módulos/arquivos.
+- **Sem formatador/linter automatizado na pipeline.** O estilo de um arquivo já
+  escrito (espaçamento, quebra de linha, organização) é respeitado exatamente
+  como está — nunca reformatado, reordenado ou "limpo" por iniciativa própria.
 - Identificadores de domínio em **inglês** (`Show`, `Session`, `Ticket`,
-  `Reservation`, `Order`, `Buyer`); **comentários em português**.
+  `Reservation`, `Order`, `User`); **comentários em português**.
 - Responsabilidade única; funções/métodos **≤ ~30 linhas** sem justificativa
   técnica.
 - **Nenhum `except`/`catch` vazio** — exceção tratada ou logada.

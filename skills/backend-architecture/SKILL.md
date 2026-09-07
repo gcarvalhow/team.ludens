@@ -49,7 +49,8 @@ in-process — **não há broker, não há RabbitMQ**. Isso troca uma transaçã
 distribuída por uma transação local + entrega *at-least-once* — o preço é que os
 handlers precisam ser idempotentes. Mecanismo completo em `references/07`.
 
-> Diferença deliberada em relação ao backend da Dom Med (que inspirou este):
+> Diferença deliberada em relação a um backend privado anterior do mesmo autor
+> (que inspirou este):
 > **sem Event Sourcing**, **sem CQRS/read model**, **sem message broker** — o
 > relay chama funções Python no mesmo processo. As tabelas de domínio são a
 > fonte de verdade; `events` é só a fila de efeitos de saída.

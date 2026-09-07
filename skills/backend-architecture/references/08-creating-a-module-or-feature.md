@@ -112,7 +112,9 @@ antes de testar.
 - [ ] Remoção usa `is_active`/estado de domínio (sessão com venda: cancela, não
       deleta), não `DELETE`.
 - [ ] Migration gerada e revisada manualmente.
-- [ ] `ruff check .` e `pytest -q` verdes.
+- [ ] `pytest -q` verde.
+- [ ] Espaçamento, quebra de linha e organização do código pré-existente não
+      foram alterados fora do necessário para a mudança.
 
 Este checklist é o que o `senior-dev` (agent do team.ludens) tende a cobrar em
 revisão — rode por ele antes de abrir PR.

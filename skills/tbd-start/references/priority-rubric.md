@@ -1,6 +1,7 @@
 # Como decidir Priority
 
-Convenção do Project `@ludens` (espelha a do "Automation Hub" da Dom Med):
+Convenção do Project `@ludens` (espelha a de um sistema de automação privado
+anterior do mesmo autor):
 **quanto maior o número, mais importante** — o oposto do estilo "P0 é o mais
 urgente". `0` é o piso da escala; não force um valor nele sem um sinal explícito
 de que é rascunho/exploração sem compromisso de entrega.
