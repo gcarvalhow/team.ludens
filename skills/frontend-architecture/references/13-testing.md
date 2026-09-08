@@ -9,7 +9,7 @@ Teste é parte do contrato de entrega, não apêndice.
 
 > `docs.ludens/backend/testing.md` registra que os testes de componente do
 > frontend ainda são um alvo — o único portão automatizado hoje é `lint` + `build`.
-> Esta referência descreve o padrão-alvo (mesmo do `web.hub.dommed`); introduzir a
+> Esta referência descreve o padrão-alvo (mesmo de um frontend privado anterior); introduzir a
 > suíte de fato é uma decisão a registrar em `docs.ludens` antes de virar gate.
 
 ## O que cada camada valida

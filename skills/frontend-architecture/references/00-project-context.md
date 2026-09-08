@@ -39,7 +39,7 @@ separado — **nunca é tocado a partir deste repo** (`references/12`).
 
 ## Tema
 
-Não há tema escuro forçado (isso era do produto interno da DOM Med). O Ludens é
+Não há tema escuro forçado (isso era de um produto privado anterior). O Ludens é
 público: contraste e legibilidade seguem **WCAG 2.1 AA**; se houver alternância
 de tema, é escolha do usuário, não hardcode.
 
