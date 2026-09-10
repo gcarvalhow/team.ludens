@@ -13,7 +13,8 @@ Repo atual: !`gh repo view --json nameWithOwner -q .nameWithOwner` (chame o resu
 **1. Coletar** — tipo (`feat`/`fix`/`refactor`/`test`/`infra`/`docs`) e do que se
 trata (breve, você desenvolve o resto do contexto). $ARGUMENTS já pode trazer isso.
 Se a task nasce de uma spec (`docs.ludens/specs/[domínio]-[conceito]/`), cite a
-pasta — o corpo da issue referencia `spec.md` / `logic.md` / `implementation-spec.md`.
+pasta — o corpo da issue referencia `spec.md` / `logic.md` e o documento da
+superfície (`backend.md` / `frontend.md` / `quality.md`).
 
 **2. Checar duplicata** — `gh issue list --repo {repo} --state all --search
 "{palavras-chave}"`. Se achar algo cobrindo o mesmo assunto: **pare**, mostre ao
@@ -23,9 +24,9 @@ usuário, só prossiga com confirmação de que é algo novo.
 ponto final}`, em português.
 
 **4. Corpo** — use `templates/issue-body.md` (seções fixas). Se a task for uma
-fatia de feature vinda de uma `implementation-spec.md`, a seção "Escopo" é a
-checklist de arquivos/passos daquela fatia (backend, frontend ou QA) copiada da
-spec, e "Referências" linka a pasta de spec.
+fatia de feature vinda de `backend.md` / `frontend.md` / `quality.md`, a seção
+"Escopo" é a checklist de arquivos daquele documento, e "Referências" linka a
+pasta de spec.
 
 **5. Confirmar** — mostre título e corpo, pergunte antes de criar.
 

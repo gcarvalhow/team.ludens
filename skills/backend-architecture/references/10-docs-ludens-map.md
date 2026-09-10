@@ -45,7 +45,9 @@ precisa saber agora.
 | `specs/[domínio]-[conceito]/spec.md` | O que a feature é e por quê (produto). |
 | `specs/[domínio]-[conceito]/logic.md` | Regras, estados, contrato FE↔BE (negócio). |
 | `specs/[domínio]-[conceito]/integration.md` | Contrato backend→frontend (rotas, request/response, erros). |
-| `specs/[domínio]-[conceito]/implementation-spec.md` | Mapa de todo o código por responsável + passo a passo TBD. |
+| `specs/[domínio]-[conceito]/backend.md` | Todo o código Python da feature, arquivo a arquivo, + passo a passo TBD. |
+| `specs/[domínio]-[conceito]/frontend.md` | Todo o código `.ts`/`.tsx` da feature, arquivo a arquivo, + passo a passo TBD. |
+| `specs/[domínio]-[conceito]/quality.md` | DoR, casos de domínio (pytest) com código, testes de integração, roteiro manual. |
 
 ## Time e processo
 

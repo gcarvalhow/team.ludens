@@ -17,7 +17,8 @@ spec em `docs.ludens/specs/`, o caminho não é abrir issue direto — é o pipe
 de produto: recomende `/team-ludens:feature-design` (que dispara a análise de
 produto e gera a `spec.md`), depois `logic-design`, depois
 `feature-implementation-spec`. Só volte pra cá (ou direto pra `tbd-start`) quando
-existir a `implementation-spec.md` da feature — aí a issue é uma fatia dela.
+existirem os documentos de implementação da feature (`backend.md` / `frontend.md`
+/ `quality.md`) — aí a issue é uma fatia de um deles.
 
 **1. Estado real do projeto** — rode `${CLAUDE_SKILL_DIR}/scripts/repo_status.py
 {palavras-chave}` (um `python` só; cobre os 4 repos `*.ludens` + o Project

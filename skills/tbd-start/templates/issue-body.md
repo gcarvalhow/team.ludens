@@ -2,7 +2,7 @@
 <!-- situação atual, por que isso virou necessário. Se vem de uma spec, linke a pasta docs.ludens/specs/[domínio]-[conceito]/ -->
 
 ## Escopo
-<!-- checklist de itens do que precisa ser feito. Numa fatia de feature, é a lista de arquivos/passos daquela responsabilidade (backend / frontend / QA) copiada da implementation-spec.md -->
+<!-- checklist de itens do que precisa ser feito. Numa fatia de feature, é a lista de arquivos daquela superfície copiada de backend.md / frontend.md / quality.md -->
 - [ ] ...
 
 ## Por quê

@@ -19,7 +19,7 @@
 | Trunk-Based Development, Conventional Commits, feature flags | `team/maintainability.md` |
 | DoR / DoD | `team/quality.md` |
 | Política de débito técnico, orçamento de ciclo (~15%) | `team/tech-debt.md` |
-| Spec de uma feature específica (o que + regras + contrato + código) | `specs/[domínio]-[conceito]/{spec,logic,integration,implementation-spec}.md` |
+| Spec de uma feature específica (o que + regras + contrato + código) | `specs/[domínio]-[conceito]/{spec,logic,integration,backend,frontend,quality}.md` |
 
 `docs.ludens` é mantida contra o código real — se um doc e o código divergirem, o
 código vence. Sinalize a divergência em vez de seguir uma regra desatualizada.
