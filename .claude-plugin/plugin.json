@@ -1,7 +1,7 @@
 {
   "name": "team-ludens",
-  "description": "Papéis de time (Product Thinking / Senior Dev / QA) + pipeline de spec (feature-design → logic-design → implementation-spec) + fluxo TBD (start/commit/pr/scope) do Ludens",
-  "version": "0.2.0",
+  "description": "Papéis de time (Product Thinking / Senior Dev / QA) + pipeline de spec (feature-design → logic-design → feature-implementation-spec → backend.md/frontend.md/quality.md) + fluxo TBD (start/commit/pr/scope) do Ludens",
+  "version": "0.3.0",
   "author": {
     "name": "Gabriel Carvalho",
     "email": "pedroolivo.dev@gmail.com"

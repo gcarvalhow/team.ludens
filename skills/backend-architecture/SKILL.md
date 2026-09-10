@@ -70,7 +70,7 @@ Este documento descreve o *padrão* e o *porquê*. Para o que está implementado
   `security_stamp`, bcrypt.
 - `docs.ludens/backend/security/configuration.md` — variáveis de ambiente.
 - `docs.ludens/specs/[domínio]-[conceito]/` — spec + logic + integration +
-  implementation-spec de cada feature.
+  backend/frontend/quality de cada feature.
 
 Se este documento divergir do que `docs.ludens` ou o código dizem, **o código e
 `docs.ludens` vencem** — pare e sinalize. Mapa completo em `references/10`.

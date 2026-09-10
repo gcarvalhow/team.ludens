@@ -38,7 +38,7 @@ O alvo primário são as **regras de negócio do domínio (DDD)**:
   `open_reservation` concorrentes na última poltrona → uma sucede, a outra recebe
   `DomainError`).
 
-Cada feature traz os próprios casos de teste na sua `implementation-spec.md`;
+Cada feature traz os próprios casos de teste na sua `quality.md`;
 `docs.ludens/backend/testing.md` fixa só a abordagem.
 
 ## Script de QA manual pré-entrega

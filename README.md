@@ -28,7 +28,7 @@ team.ludens/
 │   ├── setup/              # checa git/gh/python
 │   ├── feature-design/     # pipeline de spec — mentalidade Steve Jobs → spec.md
 │   ├── logic-design/       # pipeline de spec — regras/estados/contrato FE↔BE → logic.md
-│   ├── feature-implementation-spec/ # pipeline de spec — mapa de todo o código por responsável + passo a passo TBD → implementation-spec.md
+│   ├── feature-implementation-spec/ # pipeline de spec — código completo por superfície + passo a passo TBD → backend.md / frontend.md / quality.md
 │   ├── backend-architecture/  # arquitetura de código do api.ludens
 │   └── frontend-architecture/ # arquitetura de código do web.ludens
 └── scripts/
@@ -112,7 +112,7 @@ claude plugin tag --push
         ↓ aprovação humana (PO)
 /team-ludens:logic-design      (regras/estados/contrato FE↔BE → logic.md)
         ↓ revisão conjunta FE + BE tech lead
-/team-ludens:feature-implementation-spec   (mapa de todo o código por responsável + passo a passo TBD → implementation-spec.md)
+/team-ludens:feature-implementation-spec   (código completo por superfície + passo a passo TBD → backend.md / frontend.md / quality.md)
         ↓
 /team-ludens:tbd-scope   (opcional, Tech Lead — grounding no estado real antes de abrir issue)
         ↓
