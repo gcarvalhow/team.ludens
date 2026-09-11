@@ -12,9 +12,21 @@ Repo atual: !`gh repo view --json nameWithOwner -q .nameWithOwner` (chame o resu
 
 **1. Coletar** — tipo (`feat`/`fix`/`refactor`/`test`/`infra`/`docs`) e do que se
 trata (breve, você desenvolve o resto do contexto). $ARGUMENTS já pode trazer isso.
-Se a task nasce de uma spec (`docs.ludens/specs/[domínio]-[conceito]/`), cite a
-pasta — o corpo da issue referencia `spec.md` / `logic.md` e o documento da
-superfície (`backend.md` / `frontend.md` / `quality.md`).
+Se a task nasce de uma spec (`docs.ludens/specs/[domínio]-[conceito]/`):
+
+- **Antes de citar a pasta, atualize `docs.ludens` e confira se a spec mudou
+  recentemente.** `git -C <caminho-local-de-docs.ludens> pull` (sem checkout
+  local, releia o arquivo direto do GitHub — nunca confie em conteúdo já
+  carregado na sessão). Depois `git -C <caminho-local-de-docs.ludens> log -1
+  --format="%ci %s" -- specs/<pasta>/{spec,logic,integration,backend,frontend,quality}.md`
+  em cada documento que a issue vai referenciar. Se o commit mais recente for
+  de hoje ou dos últimos dias, releia o arquivo inteiro agora — não assuma que
+  o que já foi consultado antes ainda é o texto atual.
+  Isso existe porque `catalog-admin-management` (`api.ludens` PR #17) foi
+  implementada contra uma versão de `backend.md` anterior a uma correção feita
+  no **mesmo dia** — ninguém checou a data antes de começar.
+- Cite a pasta no corpo da issue — referencia `spec.md` / `logic.md` e o
+  documento da superfície (`backend.md` / `frontend.md` / `quality.md`).
 
 **2. Checar duplicata** — `gh issue list --repo {repo} --state all --search
 "{palavras-chave}"`. Se achar algo cobrindo o mesmo assunto: **pare**, mostre ao

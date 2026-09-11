@@ -21,7 +21,7 @@ em ordem numérica. Não pular nenhum arquivo. Não resumir. Ler na íntegra.
 
 O domínio (regra de negócio) vive isolado de framework, banco e transporte, em
 `domain/` dentro de cada módulo. `Show`, `Session`, `Reservation`, `Order`,
-`Ticket`, `Buyer` são **aggregate roots** — entidades com identidade própria que
+`Ticket`, `User` são **aggregate roots** — entidades com identidade própria que
 carregam seus invariantes e só mudam de estado pelos próprios métodos
 (`Reservation.confirm()`, `Order.refund()`), nunca por atribuição direta de campo
 por fora. Detalhe de cada camada em `references/02` a `references/05`.
@@ -64,8 +64,14 @@ Este documento descreve o *padrão* e o *porquê*. Para o que está implementado
 
 - `docs.ludens/backend/overview.md` — documento-mestre (anatomia de módulo,
   skeleton de arquivos, os 5 módulos).
+- `docs.ludens/backend/conventions.md` — convenções de código que não são
+  formatação: ordenação de import, `__init__.py` agregador com `__all__`,
+  ausência de `views.py`, naming de usecase/repositório sem sufixo de papel,
+  política de comentário, contrato REST, repositório base mínimo.
 - `docs.ludens/backend/design/00x-*.md` — ADRs (`001` outbox in-process, `002`
-  monólito modular), cada um com porquê/consequências e status.
+  monólito modular, `003` contrato mínimo — sem VO de dinheiro, sem camelCase,
+  sem método genérico antecipado no repositório), cada um com porquê/
+  consequências e status.
 - `docs.ludens/backend/security/authentication.md` — dual-token JWT,
   `security_stamp`, bcrypt.
 - `docs.ludens/backend/security/configuration.md` — variáveis de ambiente.

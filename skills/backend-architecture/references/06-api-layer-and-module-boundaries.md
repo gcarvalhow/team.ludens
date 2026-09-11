@@ -78,8 +78,8 @@ superfície pública entre módulos.
 
 | Módulo | Símbolo | O que resolve |
 |---|---|---|
-| `identity` | `get_current_buyer` | Dependency FastAPI — decodifica o Bearer JWT, valida `security_stamp`, carrega o `Buyer`, 401 se inválido/expirado |
-| `identity` | `require_admin` | Como acima, mas 403 se `role != ADMIN` |
+| `identity` | `get_current_user` | Dependency FastAPI — decodifica o Bearer JWT, valida `security_stamp`, carrega o `User`, 401 se inválido/expirado |
+| `identity` | `require_admin` | Como acima, mas 403 se `not user.is_admin` (não há enum de papel — `is_admin` é `bool`) |
 | `catalog` | `get_session_ref(session, session_id)` | Busca uma `Session` e devolve `SessionRef` (dataclass frozen: `id`, `capacity`, `starts_at`, `is_on_sale`) — nunca o aggregate `Session` inteiro |
 | `catalog` | `get_ticket_prices(session, session_id)` | Preços de inteira/meia da sessão, para `payment` calcular o total |
 | `payment` | `create_order_for_reservation(...)` | Ponto de entrada de `booking` para abrir a ordem Pix a partir de uma reserva confirmada |
@@ -98,7 +98,7 @@ class SessionRef:
     is_on_sale: bool
 
 async def get_session_ref(session: AsyncSession, session_id: UUID) -> SessionRef | None:
-    s = await SessionRepository(session).find_by_id(session_id)
+    s = await SessionRepository(session).find_by("id", session_id)
     if not s:
         return None
     return SessionRef(id=s.id, capacity=s.capacity, starts_at=s.starts_at, is_on_sale=s.is_on_sale)

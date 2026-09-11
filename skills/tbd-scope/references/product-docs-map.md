@@ -13,6 +13,7 @@
 | Autenticação, tokens, security_stamp, roles | `backend/security/authentication.md` |
 | Variáveis de ambiente, classificação de segredo | `backend/security/configuration.md` |
 | Estilo de código (Python/React), convenções de idioma | `backend/code-style.md` |
+| Convenções de arquitetura de backend (import, `__init__.py` agregador, naming, contrato REST, repositório base) | `backend/conventions.md` |
 | Estratégia de teste, gates de merge, script de QA manual | `backend/testing.md` |
 | Papéis do time, RACI, ownership de documentação | `team/overview.md` |
 | Setup local de dev, fluxo de branch | `team/development.md` |

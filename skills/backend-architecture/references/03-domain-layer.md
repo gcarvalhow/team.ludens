@@ -11,7 +11,7 @@ estado são válidas. Todo módulo tem a mesma estrutura interna:
 domain/
 ├── aggregates/      # raiz do agregado — identidade + invariantes + comportamento
 ├── entities/        # entidade filha, sem identidade própria fora do agregado
-├── value_objects/   # tipos imutáveis sem identidade (ex.: CPF, Money)
+├── value_objects/   # tipos imutáveis sem identidade (ex.: CPF, Email)
 ├── enumerations/    # vocabulário fechado do domínio
 └── events/          # eventos de domínio que o aggregate levanta
 ```
@@ -130,8 +130,8 @@ ciclo de vida independente — ela continua sendo mutada só pelo aggregate dono
 
 ### `value_objects/`
 
-Tipo imutável sem identidade, com validação embutida. Exemplos no Ludens: `CPF`
-(valida dígitos verificadores — RF09), `Money` (evita float em preço), `Email`.
+Tipo imutável sem identidade, com validação embutida. Exemplo real no Ludens:
+`CPF` (valida dígitos verificadores — RF09), `Email`.
 
 ```python
 @dataclass(frozen=True)
@@ -141,6 +141,18 @@ class CPF:
         if not _is_valid_cpf(self.value):
             raise DomainError("invalid CPF")
 ```
+
+**Preço não é um value object.** `catalog` (RF08) guarda preço como
+`full_price_cents: int` — uma coluna simples — e deriva o que precisar via
+`@property` (`half_price_cents = full_price_cents // 2`). Um VO `Money` chegou
+a ser introduzido em `catalog-admin-management` e foi revertido em code review
+por não ter um segundo caso de uso real: nenhum módulo mergeado faz aritmética
+de dinheiro além de "guardar em centavos e truncar pela metade". Ver
+[ADR 003](https://github.com/gcarvalhow/docs.ludens/blob/main/backend/design/003-contrato-minimo-sem-abstracao-antecipada.md)
+em `docs.ludens`. Isso não é proibição permanente — se `payment`/`booking`
+precisarem de aritmética composta de verdade (o `refund_amount` abaixo é
+candidato), reintroduzir um VO ali é revisitar a decisão, não violá-la; só não
+vira padrão default de `value_objects/` sem esse caso real.
 
 ### `enumerations/`
 
