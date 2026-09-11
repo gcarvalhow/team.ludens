@@ -10,7 +10,10 @@ Em mudanças de frontend/UI, considere trocar por "## Como testar" com passos de
 verificação manual quando ajudar o revisor. -->
 
 ## Definition of Done
-- [ ] Código segue o guia de estilo (`docs.ludens/backend/code-style.md`)
+- [ ] Revisão de conformidade rodada nesta branch (`senior-dev` Modo 2 +
+  `/code-review`, guia de estilo `docs.ludens/backend/code-style.md` e
+  `docs.ludens/backend/conventions.md`) — achados endereçados, ou pulo
+  justificado acima em "Notas ao revisor"
 - [ ] Code Review — este PR aprovado por ≥ 1 outro desenvolvedor
 - [ ] Validado e testado conforme a estratégia de QA, sem erros críticos
 - [ ] Testes automatizados relevantes criados/atualizados e passando no pipeline

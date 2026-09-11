@@ -17,10 +17,13 @@ sempre do `usecase` (ou do handler de outbox, no caso de serviço externo).
 ### A regra: estender antes de reimplementar
 
 `core/infrastructure/repositories/repository.py` já implementa toda operação
-genérica. Um repositório de módulo **estende** `BaseRepository[T]` ou
-`AggregateRepository[T]` e só adiciona método quando a query é específica do
-domínio — nunca reimplementa `find_by_id`, `find_by`, `find_all_by`,
-`find_by_id_for_update`, `exists_by`.
+genérica: `find_by`, `find_all`, `find_all_by`, `exists_by`, `save` — só isso,
+nada mais. Um repositório de módulo **estende** `BaseRepository[T]` ou
+`AggregateRepository[T]` e nunca reimplementa esses cinco. Um lookup por id
+(`find_by_id`) ou uma trava de linha (`find_by_id_for_update`) **não** vêm de
+graça da base — cada repositório especializado implementa o próprio quando um
+agregado específico precisa, exatamente como qualquer outro método
+não-genérico (ver `references/02`).
 
 ```python
 # modules/booking/infrastructure/repositories/reservation_repository.py
@@ -39,14 +42,15 @@ class ReservationRepository(AggregateRepository[Reservation]):
 ```
 
 - `AggregateRepository[T]` — para aggregate roots que levantam eventos
-  (`Reservation`, `Order`, `Show`, `Session`, `Buyer`, `Ticket`).
+  (`Reservation`, `Order`, `Show`, `Session`, `User`, `Ticket`).
 - `BaseRepository[T]` — para entidades filhas sem lifecycle de eventos próprio.
 
 Só adicione método próprio quando a query não é genérica — agregação, `JOIN`,
-`COUNT` condicional (como as contagens que sustentam RN01 e RN05). Antes de
-escrever, pergunte: é um filtro simples (`find_all_by`), uma busca com lock
-(`find_by_id_for_update`) ou checagem de existência (`exists_by`)? Se for, use o
-que já existe.
+`COUNT` condicional (como as contagens que sustentam RN01 e RN05), busca com
+lock (`find_by_id_for_update`, criado no repositório do módulo que precisa,
+nunca herdado). Antes de escrever, pergunte: é um filtro simples
+(`find_all_by`) ou checagem de existência (`exists_by`)? Se for, use o que já
+existe na base em vez de reimplementar.
 
 ### Sessão é sempre injetada, nunca criada pelo repositório
 
@@ -60,8 +64,8 @@ numa única transação atômica.
 
 | Errado | Certo |
 |---|---|
-| Reimplementar `find_by_id` num repositório de módulo | Herdar de `BaseRepository` |
-| `select(...).with_for_update()` direto num usecase | `repository.find_by_id_for_update(id)` |
+| Reimplementar `find_by`/`find_all`/`find_all_by`/`exists_by`/`save` num repositório de módulo | Herdar de `BaseRepository` |
+| `select(...).with_for_update()` direto num usecase | `repository.find_by_id_for_update(id)`, implementado no próprio repositório do módulo — não herdado de `BaseRepository` |
 | Repositório de módulo escrevendo `Event` manualmente | `AggregateRepository.save` já faz isso |
 | `DELETE FROM` físico | Soft delete via `is_active=False` por método de domínio |
 | Repositório chamando `session.commit()` | Transação é do usecase / `get_db` |
@@ -93,7 +97,7 @@ class PaymentGateway:
             timeout=httpx.Timeout(10.0),
         )
 
-    async def create_pix_charge(self, order_id: UUID, amount: Money) -> PixCharge:
+    async def create_pix_charge(self, order_id: UUID, amount_cents: int) -> PixCharge:
         try:
             resp = await self._client.post("/pixQrCode", json={...})
             resp.raise_for_status()

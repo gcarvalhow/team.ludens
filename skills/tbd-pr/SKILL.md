@@ -27,10 +27,17 @@ não seguir esse padrão: **aborte**, oriente `/team-ludens:tbd-start`.
 
 1. `gh issue view {número} --repo {repo}` — se falhar, **aborte**. Salve o título.
 2. `git status` — se houver mudança não commitada, sugira `/team-ludens:tbd-commit`.
-3. **Recomende, sem bloquear**: `Agent(subagent_type: team-ludens:senior-dev)`
+3. **Rode, não pergunte se deve rodar**: `Agent(subagent_type: team-ludens:senior-dev)`
    (Modo 2, conformidade com a skill de arquitetura do repo) e a skill nativa
    `/code-review` (bugs/qualidade) sobre `git diff master...HEAD`, antes do push.
-   Pergunte se quer rodar antes de seguir — se não quiser, prossiga.
+   Isto não é mais opcional por padrão — `catalog-admin-management` (PR #17) foi
+   exatamente o caso que essa checagem deveria ter pego antes do review humano
+   (`CamelModel`, VO `Money`, `find_by_id`/`find_by_id_for_update` inventados,
+   rotas `PATCH` — tudo sem precedente no código já mergeado).
+   - Achado de não-conformidade → mostre ao usuário, corrija antes de continuar.
+   - Só pule a rodada se o usuário pedir explicitamente pra pular (branch
+     trivial, doc-only, etc.) — registre esse pulo na "Notas ao revisor" do PR,
+     não deixe implícito.
 4. Confirme com o usuário antes de dar push.
 5. `git push -u origin {branch}`.
 6. Monte o corpo com `templates/pr-body.md`, com base em `git log

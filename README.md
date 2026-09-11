@@ -120,7 +120,7 @@ claude plugin tag --push
         ↓
 implementação, carregando a skill de arquitetura do repo (backend/frontend-architecture)
         ↓
-senior-dev (Modo 2, conformidade) + /code-review (nativa, bugs/qualidade) — recomendado, não bloqueante
+senior-dev (Modo 2, conformidade) + /code-review (nativa, bugs/qualidade) — roda por padrão em tbd-pr, pular exige pedido explícito
         ↓
 /team-ludens:tbd-commit  (quantos forem necessários — Conventional Commits pt-BR)
         ↓

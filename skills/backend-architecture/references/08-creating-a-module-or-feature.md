@@ -14,7 +14,7 @@ a doc é atualizada junto com o código.
 ## Quando criar um módulo novo vs. estender
 
 Criar módulo novo só quando o domínio novo tem identidade própria e não cabe como
-método novo em `Show`, `Session`, `Reservation`, `Order`, `Ticket` ou `Buyer` sem
+método novo em `Show`, `Session`, `Reservation`, `Order`, `Ticket` ou `User` sem
 violar o invariante deles. Antes de criar, pergunte: isso é um aggregate novo, ou
 é `Session` ganhando mais um método?
 
@@ -61,7 +61,7 @@ exceção única: criação síncrona da cobrança Pix no checkout.
 ### 6. Router
 
 `api/routers/<recurso>_router.py`, endpoint chamando o usecase, incluído no
-`router.py` do módulo. Escolher a dependency de auth certa (`get_current_buyer`,
+`router.py` do módulo. Escolher a dependency de auth certa (`get_current_user`,
 `require_admin`, ou nenhuma para catálogo público).
 
 ### 7. Módulo consumido por outro? Exportar em `dependencies.py`
@@ -116,5 +116,6 @@ antes de testar.
 - [ ] Espaçamento, quebra de linha e organização do código pré-existente não
       foram alterados fora do necessário para a mudança.
 
-Este checklist é o que o `senior-dev` (agent do team.ludens) tende a cobrar em
-revisão — rode por ele antes de abrir PR.
+Este checklist é o que o `senior-dev` (agent do team.ludens) cobra em revisão
+de conformidade. `/team-ludens:tbd-pr` roda essa revisão por padrão antes do
+push — não é mais um "se quiser rodar por ele".

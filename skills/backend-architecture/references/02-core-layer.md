@@ -21,7 +21,7 @@ core/
 ```
 
 Se a primeira frase que descreve o que você fez em `core/` menciona `Show`,
-`Session`, `Reservation`, `Order`, `Ticket` ou `Buyer` por nome, esse código está
+`Session`, `Reservation`, `Order`, `Ticket` ou `User` por nome, esse código está
 no lugar errado.
 
 ---
@@ -102,7 +102,7 @@ Fluxo, em qualquer aggregate do sistema:
 ### Aggregate root vs. entidade comum
 
 `AggregateRoot` **não** é herdado por toda classe com tabela — só pela raiz do
-agregado. Aggregates do Ludens: `Buyer` (`identity`), `Show` e `Session`
+agregado. Aggregates do Ludens: `User` (`identity`), `Show` e `Session`
 (`catalog`), `Reservation` e `Ticket` (`booking`), `Order` (`payment`). Uma
 entidade filha (ex.: um item de reserva dentro de `Reservation`, se existir)
 herda só de `Model` — não levanta eventos por conta própria; quem muda o estado
@@ -154,15 +154,26 @@ class BaseRepository(Generic[T]):
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
-    async def find_by_id(self, entity_id: UUID) -> T | None: ...
     async def find_by(self, field: str, value: Any) -> T | None: ...
+    async def find_all(self, *, order_by: Sequence[str] | None = None) -> list[T]: ...
     async def find_all_by(self, *, order_by=None, **filters: Any) -> list[T]: ...
-    async def find_by_id_for_update(self, entity_id: UUID) -> T | None: ...   # SELECT ... FOR UPDATE
     async def exists_by(self, field: str, value: Any) -> bool: ...
 
     async def save(self, entity: T) -> None:
         self._session.add(entity)
 ```
+
+Isso é **tudo** — cinco métodos, nada mais. Não existe `find_by_id` nem
+`find_by_id_for_update` aqui, mesmo sendo um lookup comum: um lookup por id
+não genérico o bastante pra virar método da base é só `find_by("id", value)`;
+uma trava de linha (`SELECT ... FOR UPDATE`) é sempre específica de um
+agregado que realmente precisa dela, nunca um método genérico esperando por
+um segundo módulo que o use. Ver `references/05` para onde
+`find_by_id_for_update` de fato mora, e o
+[ADR 003](https://github.com/gcarvalhow/docs.ludens/blob/main/backend/design/003-contrato-minimo-sem-abstracao-antecipada.md)
+em `docs.ludens` para o porquê — os dois métodos chegaram a ser adicionados
+aqui em `catalog-admin-management` e foram revertidos em code review por
+não terem precedente real.
 
 Toda leitura genérica já inclui `self.model.is_active == True` no `WHERE`.
 
@@ -188,13 +199,16 @@ vão juntos. É essa propriedade que sustenta o Outbox (`references/07`).
 `AggregateRepository[T]` — para aggregate roots que levantam eventos.
 `BaseRepository[T]` — para entidades filhas sem lifecycle próprio.
 
-### `find_by_id_for_update` — obrigatório em toda operação de "reservar"
+### Trava de linha (`find_by_id_for_update`) — não é daqui, mas é obrigatória onde existir
 
 Qualquer fluxo que reivindica ou muta disponibilidade de assento (reservar,
-confirmar, liberar, cancelar) usa `find_by_id_for_update` para travar a linha da
-`Session` antes de recontar/decrementar — nunca leitura simples seguida de
-update. Esse é o mecanismo concreto de RN05. Duas requests reservando a última
-poltrona ao mesmo tempo é exatamente o cenário que isso evita.
+confirmar, liberar, cancelar) precisa travar a linha da `Session` antes de
+recontar/decrementar — nunca leitura simples seguida de update. Esse é o
+mecanismo concreto de RN05, e a proteção contra duas requests reservando a
+última poltrona ao mesmo tempo. Mas o método que faz isso (`find_by_id_for_update`)
+**não é genérico do `core`** — é implementado no repositório do módulo que
+precisa dele (`SessionRepository`, em `catalog`), exatamente como qualquer
+outro método específico de agregado. Ver `references/05`.
 
 ---
 

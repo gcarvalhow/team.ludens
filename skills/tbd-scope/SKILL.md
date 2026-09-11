@@ -25,10 +25,13 @@ existirem os documentos de implementação da feature (`backend.md` / `frontend.
 `@ludens` de uma vez). Se algo já cobre o mesmo assunto, **pare** e mostre ao
 usuário antes de seguir.
 
-**2. Contexto documentado** — veja `references/product-docs-map.md` pra saber qual
-doc de `docs.ludens` ler conforme o assunto. Não repita uma decisão já tomada e
-documentada — se a tarefa contradiz um ADR ou uma RN aprovada, sinalize antes de
-propor escopo.
+**2. Contexto documentado** — antes de ler qualquer arquivo, atualize a cópia de
+`docs.ludens` (`git -C <caminho-local> pull`; sem checkout local, releia direto
+do GitHub) — nunca reaproveite conteúdo de `docs.ludens` já carregado numa
+sessão anterior sem confirmar que ainda é o texto atual. Veja
+`references/product-docs-map.md` pra saber qual doc ler conforme o assunto. Não
+repita uma decisão já tomada e documentada — se a tarefa contradiz um ADR ou
+uma RN aprovada, sinalize antes de propor escopo.
 
 **3. Delegar se necessário** — dúvida de abordagem/padrão de código, ou tarefa
 que se beneficia de uma spec grounded antes de abrir a issue →
